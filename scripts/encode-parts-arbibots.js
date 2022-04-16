@@ -1,6 +1,6 @@
 const ethers = require("ethers");
 const png = require("png-js");
-
+const fs = require("fs");
 const { baseImages } = require("./baseImages");
 
 // transparent: 0 (both 0 & 1 are not included in the actual palette arrays, so access needs to subtract 2)
@@ -17,24 +17,25 @@ const BASE_PALETTE_TO_COLOR_INDEX = {
   "#F0F4F7": 10,
   "#A8ABAD": 11,
   "#7D7F80": 12,
-  "#006045": 13,
-  "#004538": 14,
+  "#58788D": 13,
+  "#FFFFFF": 14,
   "#A20000": 15,
-  "#C4398B": 16,
-  "#DC5D86": 17,
-  "#F48D8A": 18,
-  "#822F22": 19,
-  "#7495A8": 20,
-  "#58788D": 21,
-  "#651415": 22,
-  "#810000": 23,
-  "#7A0475": 24,
-  "#28465A": 25,
-  "#3D5C74": 26,
-  "#50B04A": 27,
-  "#007B46": 28,
-  "#CDDDE5": 29,
-  "#47094D": 30
+  "#006045": 16,
+  "#004538": 17,
+  "#C4398B": 18,
+  "#DC5D86": 19,
+  "#F48D8A": 20,
+  "#822F22": 21,
+  "#7495A8": 22,
+  "#651415": 23,
+  "#810000": 24,
+  "#7A0475": 25,
+  "#28465A": 26,
+  "#3D5C74": 27,
+  "#50B04A": 28,
+  "#007B46": 29,
+  "#CDDDE5": 30,
+  "#47094D": 31,
 };
 
 function decodePixels(path) {
@@ -61,8 +62,6 @@ async function encodeImage(path) {
   let currentRow = 0;
   let pixel = 0;
   for (let i = 0; i < pixels.length; i = i + 4) {
-    
-
     const r = pixels[i];
     const g = pixels[i + 1];
     const b = pixels[i + 2];
@@ -81,8 +80,8 @@ async function encodeImage(path) {
       colorIndex != currentColorIndex ||
       runLength == 16 ||
       pixel % 16 === 0
-      ) {
-      console.log("We are on the currentRow", runLength, 'pixel ', pixel);
+    ) {
+      console.log("We are on the currentRow", runLength, "pixel ", pixel);
       console.log("Adding: ", runLength, currentColorIndex);
       rleEncodedData.push(runLength);
       rleEncodedData.push(currentColorIndex);
@@ -91,9 +90,6 @@ async function encodeImage(path) {
     }
     runLength++;
     pixel++;
-
-
-    
   }
 
   console.log(rleEncodedData);
@@ -133,6 +129,36 @@ async function main() {
   );
 
   console.log({ bases, signatures, sigils, BASE_PALETTE_TO_COLOR_INDEX });
+
+  const content = `
+    string[] public backgroundNames = [${bases
+    .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
+    .join(",")}];
+
+    bytes[] public backgrounds = [${bases
+      .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
+      .join(", \n")}];
+  
+      string[] public logoNames = [${signatures
+        .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
+        .join(",")}];
+    
+        bytes[] public logos = [${signatures
+          .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
+          .join(", \n")}];
+
+          string[] public decorationNames = [${sigils
+            .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
+            .join(",")}];
+        
+            bytes[] public decorations = [${sigils
+              .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
+              .join(", \n")}];
+
+
+  `;
+
+  fs.writeFileSync("./output/bytecode.txt", content);
 }
 
 main()
