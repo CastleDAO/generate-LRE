@@ -132,29 +132,28 @@ async function main() {
 
   const content = `
     string[] public backgroundNames = [${bases
-    .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
-    .join(",")}];
+      .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
+      .join(",")}];
 
     bytes[] public backgrounds = [${bases
       .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
       .join(", \n")}];
   
-      string[] public logoNames = [${signatures
-        .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
-        .join(",")}];
+    string[] public logoNames = [${signatures
+      .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
+      .join(",")}];
     
-        bytes[] public logos = [${signatures
-          .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
-          .join(", \n")}];
+    bytes[] public logos = [${signatures
+      .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
+      .join(", \n")}];
 
-          string[] public decorationNames = [${sigils
-            .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
-            .join(",")}];
-        
-            bytes[] public decorations = [${sigils
-              .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
-              .join(", \n")}];
-
+    string[] public decorationNames = [${sigils
+      .map((b) => `"${b.f.split("/").pop().replace(".png", "")}"`)
+      .join(",")}];
+  
+      bytes[] public decorations = [${sigils
+        .map((b) => `bytes(hex"${b.image.replace("0x", "")}") \n`)
+        .join(", \n")}];
 
   `;
 
@@ -167,8 +166,3 @@ main()
     console.error(error);
     process.exit(1);
   });
-
-async function short() {
-  const image = await encodeImage(baseImages.base[0]);
-}
-//short();

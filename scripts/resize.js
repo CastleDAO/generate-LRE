@@ -6,11 +6,8 @@ const { baseImages } = require("./baseImages");
 
 function resize(base, path) {
     const image = images(path).size(500);
-  // const image = images(footy.parts.kit).size(size);
 
- 
-
-  // Save image
+   // Save image
   const imagePath = `./output/resized/${base}/${path.split('/').pop()}.png`;
   image.save(imagePath, {
     quality: 100,

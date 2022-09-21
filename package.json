@@ -1,11 +1,8 @@
 {
-  "name": "footy-nouns-generator",
+  "name": "ballot-generator",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "encode": "node scripts/encode"
-  },
   "dependencies": {
     "@nouns/sdk": "^0.1.6",
     "canvas": "^2.8.0",

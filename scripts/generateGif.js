@@ -8,7 +8,7 @@ const height = 320;
 const canvas = createCanvas(width, height);
 const context = canvas.getContext('2d');
 
-async function generateNoun(noun, id, context, outputFolder) {
+async function generateBallot(noun, id, context, outputFolder) {
   return loadImage(`${outputFolder}/${id}.png`).then((image) => {
     context.drawImage(image, 0, 0, 320, 320);
   });
@@ -32,7 +32,7 @@ async function generateGif(outputFolder, amount) {
   for (var i = 0; i < amount; i++) {
     const noun = data[i];
 
-    await generateNoun(noun, noun.tokenId, context, outputFolder);
+    await generateBallot(noun, noun.tokenId, context, outputFolder);
     encoder.addFrame(context);
     context.clearRect(0, 0, width, height);
   }
